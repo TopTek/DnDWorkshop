@@ -26,8 +26,6 @@
 		game.updates = 0;
 		game.frames = 0;
 
-		game.contextBackground = document.getElementById("canvas").getContext("2d");
-
 		/* Key Codes
 		Up Arrow		38
 		Down Arrow		40
@@ -137,7 +135,6 @@
 		//renders all elements and objects and keeps trak of how many frames the game has
 		//uses few functions based on what needs to be rendered
 		function render(){
-			game.contextBackground.clearRect(0, 0, game.width, game.height);
 			game.frames++;
 		}
 

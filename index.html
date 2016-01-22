@@ -4,7 +4,7 @@
 	
 	<!--Background Music
 	<audio src="soundfile.jpg" hidden="true" autostart="true" loop="true"/>  -->
-	<title>D&D Workshop - Play D&D With Friends, And More!</title>
+	<title>D&D Workshop - Play D&D With Friends, Create Characters, and More!</title>
 	<link rel='stylesheet' type='text/css' href='stylesheet.css'/>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
@@ -12,12 +12,15 @@
 </head>
 <body>
 	<div id="container">
-		<div id = "leftInfo"></div>
-		<div id = "centerInfo">
-			<div id="topInfo"></div>
-			<canvas id = "canvas"></canvas>
-		</div>
+		<div id = "leftInfo">
+			<div id = "iconContainer">
+				<div id = "icon"></div>
+				<div id= "iconSettings"></div>
+			</div>
+		</div> 
+		<div id = "viewPort"></div>
 		<div id = "rightInfo"></div>
+		<div id = "centerInfo"></div>
 	</div>
 </body>
 </html>		
