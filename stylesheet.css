@@ -1,3 +1,10 @@
+#tile{
+	width: 100px;
+	height: 100px;
+}
+
+/* -----< Containers and Divs go below | Textures and stuff go above >----- */
+
 #viewPort{
 	background-color: #000000;
 	width: calc(100% - 400px);
