@@ -1,15 +1,22 @@
 #tile{
 	width: 100px;
 	height: 100px;
+	display: block;
+	top: 100px;
+}
+
+#base{
+	transform: rotate3D(100,100,0,1000deg);
 }
 
 /* -----< Containers and Divs go below | Textures and stuff go above >----- */
 
 #viewPort{
-	background-color: #000000;
+	background-color: #0f0fff;
 	width: calc(100% - 400px);
 	height: calc(100% - 200px);
 	float: left;
+	overflow: hidden;
 }
 
 #leftInfo{
