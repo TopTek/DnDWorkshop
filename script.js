@@ -25,7 +25,33 @@
 
 		game.updates = 0;
 		game.frames = 0;
-
+		
+		game.rotationX = 0;
+		game.rotationY = 0;
+		game.rotationZ = 0;
+		
+		var mouse = {};
+		mouse.x = 0;
+		mouse.y = 0;
+		mouse.down = 0;
+		mouse.lastUpX = 0;
+		mouse.lastUpY = 0;
+		
+		document.body.onmousedown = function(){
+			mouse.down = true;
+		}
+		document.body.onmouseup = function(){
+			mouse.down = false;
+		}
+		document.onmousemove = function(e){
+			mouse.x = e.pageX;
+			mouse.y = e.pageY;
+			if(!mouse.down){
+				mouse.lastUpX = e.pageX;
+				mouse.lastUpY = e.pageY;
+			}
+		}
+		
 		/* Key Codes
 		Up Arrow		38
 		Down Arrow		40
@@ -41,6 +67,18 @@
 		
 		Space			32
 		*/
+		
+		rotateBase(){
+			var elm = window.getComputedStyle($("#base"),null)
+			var baseRoationMatrix = elm.getPropertyValue("-webkit-transform") ||
+									elm.getPropertyValue("-moz-transform") ||
+									elm.getPropertyValue("-ms-transform") ||
+									elm.getPropertyValue("-o-transform") ||
+									elm.getPropertyValue("transform") ||
+									"FAIL";
+			var values = baseRoationMatrix.split("(")[1].split(")")[0].split(",");
+			//$("#base").style.webkitTransform = 
+		}
 
 		//loads images used during the initialization process
 		function preInitImages(paths){ 
@@ -128,11 +166,15 @@
 		//upadates all logic and keeps track of how many updates the game has
 		//uses few functions based on what needs to be updated
 		function update(){
+			rotateBase();
 			
+			if(game.updates%60 ==0){
+				console.log("mouse x: " + mouse.x + " y: " + mouse.y);
+			}
 			game.updates++;
 		}
 
-		//renders all elements and objects and keeps trak of how many frames the game has
+		//renders all elements and objects and keeps track of how many frames the game has
 		//uses few functions based on what needs to be rendered
 		function render(){
 			game.frames++;
