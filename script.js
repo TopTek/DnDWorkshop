@@ -8,6 +8,9 @@
 		game.height = 0;
 		game.midWidth = game.width / 2;
 		game.midHeight = game.height / 2;
+		
+		game.mapWidth = 0;
+		game.mapHeight = 0;
 
 		game.oldTime = (new Date().getTime());
 		game.time = 0;
@@ -20,12 +23,16 @@
 		game.doneInitImages = 0;
 		game.requiredInitImages = 0;
 
-		game.imagesToLoadInit = []
+		game.imagesToLoadInit = [];
          //4 images per line
 
 		game.updates = 0;
 		game.frames = 0;
 		
+		game.x = 0;
+		game.xRoot = 0;
+		game.y = 0;
+		game.yRoot = 0;
 		game.rotationX = 0;
 		game.rotationY = 0;
 		game.rotationZ = 0;
@@ -51,6 +58,12 @@
 				mouse.lastUpY = e.pageY;
 			}
 		}
+		$("#resetViewPort").click(function(){
+			game.x = 0;
+			game.xRoot = 0;
+			game.y = 0;
+			game.yRoot = 0;
+		})
 		
 		/* Key Codes
 		Up Arrow		38
@@ -68,16 +81,23 @@
 		Space			32
 		*/
 		
-		rotateBase(){
-			var elm = window.getComputedStyle($("#base"),null)
-			var baseRoationMatrix = elm.getPropertyValue("-webkit-transform") ||
-									elm.getPropertyValue("-moz-transform") ||
-									elm.getPropertyValue("-ms-transform") ||
-									elm.getPropertyValue("-o-transform") ||
-									elm.getPropertyValue("transform") ||
-									"FAIL";
-			var values = baseRoationMatrix.split("(")[1].split(")")[0].split(",");
-			//$("#base").style.webkitTransform = 
+		function createMap(width, height){
+			for(var i = 0; i < width*height;i++){
+				var div = document.createElement("div");
+				div.id = "tile";
+				document.getElementById("base").appendChild(div);
+			}
+		}
+		
+		function moveBase(){
+			if(!mouse.down){
+				game.xRoot = game.x;
+				game.yRoot = game.y;
+			}
+			game.x = mouse.x - mouse.lastUpX + game.xRoot;
+			game.y = mouse.y - mouse.lastUpY + game.yRoot;
+			document.getElementById("base").style.left = game.x + "px"
+			document.getElementById("base").style.top = game.y + "px"
 		}
 
 		//loads images used during the initialization process
@@ -141,7 +161,7 @@
 
 		//adds what needs to be added before the first frame is drawn and ends the initialization process
 		function init(){
-
+			createMap(4, 5);
 			//all processes that need to be initialized go above this
 			console.log("RequestAnimationFrame: Set");
 			console.log("---------------------Initialized---------------------");
@@ -166,7 +186,7 @@
 		//upadates all logic and keeps track of how many updates the game has
 		//uses few functions based on what needs to be updated
 		function update(){
-			rotateBase();
+			moveBase();
 			
 			if(game.updates%60 ==0){
 				console.log("mouse x: " + mouse.x + " y: " + mouse.y);
