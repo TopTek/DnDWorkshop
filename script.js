@@ -11,6 +11,13 @@
 		
 		game.mapWidth = 0;
 		game.mapHeight = 0;
+		game.tiles = [];
+		
+		function tile(id, x, y){
+			this.id = id;
+			this.x = x;
+			this.y = y;
+		}
 
 		game.oldTime = (new Date().getTime());
 		game.time = 0;
@@ -23,7 +30,9 @@
 		game.doneInitImages = 0;
 		game.requiredInitImages = 0;
 
-		game.imagesToLoadInit = [];
+		game.imagesToLoadInit = [
+			"textures/blankTile.png","textures/blankTileHighlighted.png"
+		];
          //4 images per line
 
 		game.updates = 0;
@@ -36,6 +45,8 @@
 		game.rotationX = 0;
 		game.rotationY = 0;
 		game.rotationZ = 0;
+		
+		game.context = document.getElementById("canvas").getContext("2d");
 		
 		var mouse = {};
 		mouse.x = 0;
@@ -81,11 +92,18 @@
 		Space			32
 		*/
 		
+		function renderMap(){
+			for(i in game.tiles){
+				game.context.drawImage(game.initImages[getImage("textures/blankTile.png")], game.tiles[i].x + game.x, game.tiles[i].y + game.y);
+			}
+		}
+		
 		function createMap(width, height){
-			for(var i = 0; i < width*height;i++){
-				var div = document.createElement("div");
-				div.id = "tile";
-				document.getElementById("base").appendChild(div);
+			for(var y = 0; y < height;y++){
+				for(var x = 0; x < width;x++){
+					var Tile = new tile(0, x, y);
+					game.tiles.push(Tile);
+				}
 			}
 		}
 		
@@ -96,8 +114,6 @@
 			}
 			game.x = mouse.x - mouse.lastUpX + game.xRoot;
 			game.y = mouse.y - mouse.lastUpY + game.yRoot;
-			document.getElementById("base").style.left = game.x + "px"
-			document.getElementById("base").style.top = game.y + "px"
 		}
 
 		//loads images used during the initialization process
@@ -177,7 +193,7 @@
 					return i;
 				}
 
-				if(string == game.imagesToLoadInit[i]){
+				if(string.localeCompare(game.imagesToLoadInit[i])==0){
 					return i;
 				}
 			}
@@ -197,6 +213,8 @@
 		//renders all elements and objects and keeps track of how many frames the game has
 		//uses few functions based on what needs to be rendered
 		function render(){
+			renderMap();
+			
 			game.frames++;
 		}
 

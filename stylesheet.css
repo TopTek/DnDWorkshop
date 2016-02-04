@@ -12,6 +12,11 @@
 	position: relative;
 }
 
+#canvas{
+	width: 100%;
+	height: 100%;
+}
+
 /* -----< Containers and Divs go below | Textures and stuff go above >----- */
 
 .icon{
