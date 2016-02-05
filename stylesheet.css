@@ -78,6 +78,12 @@
 	display: inline-block;
 }
 
+.slectable{
+	-webkit-user-select: all;
+	-moz-user-select: all;
+	user-select: all;
+}
+
 *{
 	/*border:1px dashed blue;
 	/* ^ Only for testing element boxes ^ */
@@ -85,4 +91,10 @@
 	padding: 0;
 	cursor: default;
 	box-sizing: border-box;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	user-drag: none; 
+	-webkit-user-drag: none;
+	-ms-user-select: none;
 }

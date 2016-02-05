@@ -4,8 +4,9 @@
 	$(document).ready(function(){ 
 
 		var game = {};
-		game.width = 0;
-		game.height = 0;
+		game.canvas = document.getElementById("canvas");
+		game.width = canvas.width;
+		game.height = canvas.height;
 		game.midWidth = game.width / 2;
 		game.midHeight = game.height / 2;
 		
@@ -46,7 +47,7 @@
 		game.rotationY = 0;
 		game.rotationZ = 0;
 		
-		game.context = document.getElementById("canvas").getContext("2d");
+		game.context = canvas.getContext("2d");
 		
 		var mouse = {};
 		mouse.x = 0;
@@ -55,12 +56,15 @@
 		mouse.lastUpX = 0;
 		mouse.lastUpY = 0;
 		
-		document.body.onmousedown = function(){
+		$("#canvas").mousedown(function(){
 			mouse.down = true;
-		}
-		document.body.onmouseup = function(){
+		});
+		$(document).mouseup(function(){
 			mouse.down = false;
-		}
+		});
+		$("#toolbar").mousedown(function(){
+			mouse.down = true;
+		});
 		document.onmousemove = function(e){
 			mouse.x = e.pageX;
 			mouse.y = e.pageY;
@@ -101,7 +105,7 @@
 		function createMap(width, height){
 			for(var y = 0; y < height;y++){
 				for(var x = 0; x < width;x++){
-					var Tile = new tile(0, x, y);
+					var Tile = new tile(0, x*64, y*64);
 					game.tiles.push(Tile);
 				}
 			}
@@ -177,7 +181,7 @@
 
 		//adds what needs to be added before the first frame is drawn and ends the initialization process
 		function init(){
-			createMap(4, 5);
+			createMap(5, 4);
 			//all processes that need to be initialized go above this
 			console.log("RequestAnimationFrame: Set");
 			console.log("---------------------Initialized---------------------");
@@ -204,15 +208,15 @@
 		function update(){
 			moveBase();
 			
-			if(game.updates%60 ==0){
-				console.log("mouse x: " + mouse.x + " y: " + mouse.y);
-			}
 			game.updates++;
 		}
 
 		//renders all elements and objects and keeps track of how many frames the game has
 		//uses few functions based on what needs to be rendered
 		function render(){
+			game.canvas.width = $("#base").width();
+			game.canvas.height = $("#base").height();
+			game.context.clearRect(0, 0, game.width, game.height);
 			renderMap();
 			
 			game.frames++;
