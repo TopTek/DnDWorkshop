@@ -69,6 +69,13 @@
 		$(document).mouseup(function(){
 			mouse.down = false;
 		});
+		$("#iconSettings").toggle();
+		$("#icon").click(function(){
+			$("#iconSettings").slideToggle();
+		});
+		$("#iconContainer").mouseleave(function(){
+			$("#iconSettings").slideUp();
+		});
 		
 		$("#canvas").on("mousewheel", function(e){mousewheel(e)});
 		$("#toolbar").on("mousewheel", function(e){mousewheel(e)});
