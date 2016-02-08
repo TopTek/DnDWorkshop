@@ -9,10 +9,14 @@
 		game.height = canvas.height;
 		game.midWidth = game.width / 2;
 		game.midHeight = game.height / 2;
+		game.offsetL = $("#canvas").offset().left;
+		game.offsetT = $("#canvas").offset().top;
 		
 		game.mapWidth = 0;
 		game.mapHeight = 0;
 		game.tiles = [];
+		game.tileSize = 64;
+		game.scale = 1;
 		
 		function tile(id, x, y){
 			this.id = id;
@@ -40,9 +44,7 @@
 		game.frames = 0;
 		
 		game.x = 0;
-		game.xRoot = 0;
 		game.y = 0;
-		game.yRoot = 0;
 		game.rotationX = 0;
 		game.rotationY = 0;
 		game.rotationZ = 0;
@@ -59,25 +61,50 @@
 		$("#canvas").mousedown(function(){
 			mouse.down = true;
 		});
-		$(document).mouseup(function(){
-			mouse.down = false;
-		});
+		
 		$("#toolbar").mousedown(function(){
 			mouse.down = true;
 		});
-		document.onmousemove = function(e){
-			mouse.x = e.pageX;
-			mouse.y = e.pageY;
-			if(!mouse.down){
-				mouse.lastUpX = e.pageX;
-				mouse.lastUpY = e.pageY;
+		
+		$(document).mouseup(function(){
+			mouse.down = false;
+		});
+		
+		$("#canvas").on("mousewheel", function(e){mousewheel(e)});
+		$("#toolbar").on("mousewheel", function(e){mousewheel(e)});
+		
+		function mousewheel(e){
+			if(e.originalEvent.wheelDelta > 0){
+				game.scale +=.25;
+				if(game.scale > 3) {
+					game.scale = 3;
+				}else{
+					game.x -= (mouse.x - game.x - game.offsetL) / (game.scale-.25) / 4;
+					game.y -= (mouse.y - game.y - game.offsetT) / (game.scale-.25) / 4;
+				}
+			}else{
+				game.scale -=.25;
+				if(game.scale <.5){
+					game.scale = .5;
+				}else{
+					game.x += (mouse.x - game.x - game.offsetL) / (game.scale+.25) / 4;
+					game.y += (mouse.y - game.y - game.offsetT) / (game.scale+.25) / 4;
+				}
 			}
 		}
+		
+		document.onmousemove = function(e){
+			mouse.x = e.clientX;
+			mouse.y = e.clientY;
+			if(!mouse.down){
+				mouse.lastUpX = mouse.x;
+				mouse.lastUpY = mouse.y;
+			}
+		}
+		
 		$("#resetViewPort").click(function(){
 			game.x = 0;
-			game.xRoot = 0;
 			game.y = 0;
-			game.yRoot = 0;
 		})
 		
 		/* Key Codes
@@ -97,27 +124,51 @@
 		*/
 		
 		function renderMap(){
-			for(i in game.tiles){
-				game.context.drawImage(game.initImages[getImage("textures/blankTile.png")], game.tiles[i].x + game.x, game.tiles[i].y + game.y);
+			for(var i in game.tiles){
+				var img = game.initImages[getImage("textures/blankTile.png")]
+				var x = game.tiles[i].x * game.scale * game.tileSize + game.x;
+				var y = game.tiles[i].y * game.scale * game.tileSize + game.y;
+				var width = game.tileSize * game.scale;
+				var height = game.tileSize * game.scale;
+				game.context.drawImage(img, x, y, width, height);
 			}
 		}
 		
 		function createMap(width, height){
 			for(var y = 0; y < height;y++){
 				for(var x = 0; x < width;x++){
-					var Tile = new tile(0, x*64, y*64);
+					var Tile = new tile(0, x, y);
 					game.tiles.push(Tile);
 				}
 			}
 		}
 		
 		function moveBase(){
-			if(!mouse.down){
-				game.xRoot = game.x;
-				game.yRoot = game.y;
+			game.x += mouse.x - mouse.lastUpX;
+			game.y += mouse.y - mouse.lastUpY;
+			if(mouse.down){
+				mouse.lastUpX = mouse.x;
+				mouse.lastUpY = mouse.y;
 			}
-			game.x = mouse.x - mouse.lastUpX + game.xRoot;
-			game.y = mouse.y - mouse.lastUpY + game.yRoot;
+		}
+		
+		//upadates all logic and keeps track of how many updates the game has
+		//uses few functions based on what needs to be updated
+		function update(){
+			moveBase();
+			
+			game.updates++;
+		}
+
+		//renders all elements and objects and keeps track of how many frames the game has
+		//uses few functions based on what needs to be rendered
+		function render(){
+			game.canvas.width = $("#base").width();
+			game.canvas.height = $("#base").height();
+			game.context.clearRect(0, 0, game.width, game.height);
+			renderMap();
+			
+			game.frames++;
 		}
 
 		//loads images used during the initialization process
@@ -181,7 +232,7 @@
 
 		//adds what needs to be added before the first frame is drawn and ends the initialization process
 		function init(){
-			createMap(5, 4);
+			createMap(25, 24);
 			//all processes that need to be initialized go above this
 			console.log("RequestAnimationFrame: Set");
 			console.log("---------------------Initialized---------------------");
@@ -201,25 +252,6 @@
 					return i;
 				}
 			}
-		}
-
-		//upadates all logic and keeps track of how many updates the game has
-		//uses few functions based on what needs to be updated
-		function update(){
-			moveBase();
-			
-			game.updates++;
-		}
-
-		//renders all elements and objects and keeps track of how many frames the game has
-		//uses few functions based on what needs to be rendered
-		function render(){
-			game.canvas.width = $("#base").width();
-			game.canvas.height = $("#base").height();
-			game.context.clearRect(0, 0, game.width, game.height);
-			renderMap();
-			
-			game.frames++;
 		}
 
 		//creates a loop that occurs before the game runs
