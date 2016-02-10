@@ -80,6 +80,8 @@
 		$("#canvas").on("mousewheel", function(e){mousewheel(e)});
 		$("#toolbar").on("mousewheel", function(e){mousewheel(e)});
 		
+		$("#iconMap").imageMapResize();
+		
 		function mousewheel(e){
 			if(e.originalEvent.wheelDelta > 0){
 				game.scale +=.25;
