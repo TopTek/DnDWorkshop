@@ -60,7 +60,7 @@
 		
 		$("#canvas").mousedown(function(){
 			mouse.down = true;
-		});
+			});
 		
 		$("#toolbar").mousedown(function(){
 			mouse.down = true;
@@ -70,7 +70,7 @@
 			mouse.down = false;
 		});
 		$("#iconSettings").toggle();
-		$("#icon").click(function(){
+		$("#iconMap").click(function(){
 			$("#iconSettings").slideToggle();
 		});
 		$("#iconContainer").mouseleave(function(){
