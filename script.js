@@ -70,6 +70,7 @@
 			mouse.down = false;
 		});
 		$("#iconSettings").toggle();
+		
 		$("#iconMap").click(function(){
 			$("#iconSettings").slideToggle();
 		});
@@ -114,6 +115,7 @@
 		$("#resetViewPort").click(function(){
 			game.x = 0;
 			game.y = 0;
+			game.scale = 1;
 		})
 		
 		/* Key Codes
