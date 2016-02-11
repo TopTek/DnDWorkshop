@@ -120,6 +120,33 @@
 	user-select: all;
 }
 
+#loadingCenter{
+	width: 512px;
+	height: 512px;
+	position: absolute;
+	top: calc(50% - 256px);
+	left: calc(50% - 256px);
+}
+
+.loadingIcon{
+	position: absolute;
+	width: 512px;
+	height: 512px;
+	top:0;
+	left:0;
+}
+
+#percentLoaded{
+	position: relative; 
+	width: 10%; 
+	height: 100%; 
+	overflow:hidden;
+}
+
+body{
+	background: #000000;
+}
+
 *{
 	/*border:1px dashed blue;
 	/* ^ Only for testing element boxes ^ */

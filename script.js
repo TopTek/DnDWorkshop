@@ -58,6 +58,8 @@
 		mouse.lastUpX = 0;
 		mouse.lastUpY = 0;
 		
+		$("#container").hide();
+		
 		$("#canvas").mousedown(function(){
 			mouse.down = true;
 			});
