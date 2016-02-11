@@ -72,6 +72,7 @@
 		$("#iconSettings").toggle();
 		
 		$("#iconMap").click(function(){
+			$("#iconSettings").stop(true,false);
 			$("#iconSettings").slideToggle();
 		});
 		$("#iconContainer").mouseleave(function(){
