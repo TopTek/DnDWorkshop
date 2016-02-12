@@ -34,6 +34,14 @@
 		game.initImages = [];
 		game.doneInitImages = 0;
 		game.requiredInitImages = game.imagesToLoadInit.length;
+		
+		game.audiosToLoadInit = [
+			"audios/boom.wav"
+		];
+         //4 images per line
+		game.initAudios = [];
+		game.doneInitAudios = 0;
+		game.requiredInitAudios = game.audiosToLoadInit.length;
 
 		game.updates = 0;
 		game.frames = 0;
@@ -86,6 +94,7 @@
 		$("#iconMap").click(function(){
 			$("#iconSettings").stop(true,false);
 			$("#iconSettings").slideToggle();
+			getAudio("audios/boom.wav").play();
 		});
 		$("#iconContainer").mouseleave(function(){
 			$("#iconSettings").slideUp();
@@ -237,6 +246,33 @@
 				}
 			}
 		}
+		
+		//loads images used after the initialization process
+  		function initAudios(paths){ 
+  			game.requiredInitAudios = paths.length;
+  			for(i in paths){ 
+  				var aud = new Audio; 
+  				aud.src = paths[i]; 
+  				game.initAudios[i] = aud; 
+  				console.log(paths[i] + " Loaded"); 
+  				game.initAudios[i].onload = function(){ 
+  					game.doneInitAudios++;  
+					progressLoad();
+  				} 
+  			} 
+  		} 
+
+  		//ensures that each image is loaded before starting the actual game
+  		function checkInitAudios(){ 
+  			if(game.doneInitAudios >= game.requiredInitAudios){
+				endLoad();
+  				init(); 
+  			}else{ 
+  				setTimeout(function(){ 
+  					checkInitImages();   
+  				}, 1); 
+  			} 
+  		}
 
   		//loads images used after the initialization process
   		function initImages(paths){ 
@@ -256,8 +292,8 @@
   		//ensures that each image is loaded before starting the actual game
   		function checkInitImages(){ 
   			if(game.doneInitImages >= game.requiredInitImages){
-				endLoad();
-  				init(); 
+  				initAudios(game.audiosToLoadInit);
+				checkInitAudios(); 
   			}else{ 
   				setTimeout(function(){ 
   					checkInitImages();   
@@ -275,6 +311,18 @@
 			var timeElapsed = (endInitTime - startInitTime) / 1000;
 			console.log("Loaded | Time: " + timeElapsed + " seconds");
 			run();	
+		}
+		
+		function getAudio(string){
+			for(i in game.initAudios){
+				if(i == game.initAudios.length - 1){
+					return i;
+				}
+
+				if(string.localeCompare(game.audiosToLoadInit[i])==0){
+					return i;
+				}
+			}
 		}
 
 		function getImage(string){
@@ -297,7 +345,7 @@
 			update();
 			render();
 		}
-		startLoad(game.requiredInitImages);
+		startLoad(game.requiredInitImages + game.requiredInitAudios);
 		initImages(game.imagesToLoadInit);
 		checkInitImages();
 	}); 
