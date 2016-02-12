@@ -27,21 +27,18 @@
 		game.oldTime = (new Date().getTime());
 		game.time = 0;
 
-		game.preInitImages = [];
-		game.donePreInitImages = 0;
-		game.requiredPreInitImages = 0;
-
-		game.initImages = [];
-		game.doneInitImages = 0;
-		game.requiredInitImages = 0;
-
 		game.imagesToLoadInit = [
-			"textures/blankTile.png","textures/blankTileHighlighted.png"
+			"textures/blankTile.png","textures/blankTileHighlighted.png", "textures/grass.png"
 		];
          //4 images per line
+		game.initImages = [];
+		game.doneInitImages = 0;
+		game.requiredInitImages = game.imagesToLoadInit.length;
 
 		game.updates = 0;
 		game.frames = 0;
+		game.loadFrames = 0;
+		game.loadResources = 0;
 		
 		game.x = 0;
 		game.y = 0;
@@ -58,7 +55,7 @@
 		mouse.lastUpX = 0;
 		mouse.lastUpY = 0;
 		
-		$("#container").hide();
+		$("#loadingContainer").hide();
 		
 		$("#canvas").mousedown(function(){
 			mouse.down = true;
@@ -184,21 +181,49 @@
 			
 			game.frames++;
 		}
-
-		//loads images used during the initialization process
-		function preInitImages(paths){ 
-			game.requiredPreInitImages = paths.length; 
-			for(i in paths){ 
-				var img = new Image; 
-				img.src = paths[i]; 
-				game.preInitImages[i] = img; 
-				console.log(paths[i] + " Loaded"); 
-				game.preInitImages[i].onload = function(){ 
-					game.donePreInitImages++; 
-
-				} 
-			} 
-		} 
+		
+		function startLoad(resources){
+			$("#container").hide();
+			$("#percentLoaded").width(0 + "%");
+			$("#loadingContainer").show();
+			$("#backgroundAnimator").show();
+			game.loadResources = resources;
+		}
+		function progressLoad(){
+			game.loadFrames++;
+			$("#percentLoaded").width((game.loadFrames / game.loadResources * 100) + "%");
+		}
+		function endLoad(){
+			game.loadFrames = 0;
+			game.loadResources = 0;
+			$("#icon").hide();
+			$("#loadingIconUnsaturated").hide();
+			$("#container").show();
+			$("#backgroundAnimator").fadeOut(1000);
+			$("#percentLoaded").css("overflow","visible");
+			$("#loadingIcon").animate({
+				width: "200px",
+				height: "200px"
+			}, 1000);
+			$("#loadingCenter").animate({
+				left: "0",
+				top: "0"
+			}, 1000, function(){
+				$("#icon").show();
+				$("#loadingContainer").hide();
+				$("#percentLoaded").css("overflow","hidden");
+				$("#loadingIcon").css("width","200px","height","200px");
+			});
+		}
+		
+		function sleep(milliseconds) {
+			var start = new Date().getTime();
+			for (var i = 0; i < 1e7; i++) {
+				if ((new Date().getTime() - start) > milliseconds){
+					break;
+				}
+			}
+		}
 
   		//loads images used after the initialization process
   		function initImages(paths){ 
@@ -209,30 +234,17 @@
   				game.initImages[i] = img; 
   				console.log(paths[i] + " Loaded"); 
   				game.initImages[i].onload = function(){ 
-  					game.doneInitImages++; 
-  					preInit();   
+  					game.doneInitImages++;  
+					progressLoad();
+					sleep(500);
   				} 
   			} 
   		} 
 
-  		//ensures that each image from the preInitImages is loaded before initializing
-  		function checkPreInitImages() { 
-  			if(game.donePreInitImages >= game.requiredPreInitImages){ 
-  				preInit(); 
-
-                //all images that need loading go here
-                initImages(game.imagesToLoadInit);
-                checkInitImages(); 
-            }else{ 
-            	setTimeout(function(){ 
-            		checkPreInitImages();    
-            	}, 1); 
-            } 
-        } 
-
   		//ensures that each image is loaded before starting the actual game
   		function checkInitImages(){ 
-  			if(game.doneInitImages >= game.requiredInitImages){ 
+  			if(game.doneInitImages >= game.requiredInitImages){
+				endLoad();
   				init(); 
   			}else{ 
   				setTimeout(function(){ 
@@ -241,12 +253,9 @@
   			} 
   		}
 
-        //draws the loading bar and orgathia icon during the initialization
-        function preInit(){}
-
 		//adds what needs to be added before the first frame is drawn and ends the initialization process
 		function init(){
-			createMap(25, 24);
+			createMap(10, 10);
 			//all processes that need to be initialized go above this
 			console.log("RequestAnimationFrame: Set");
 			console.log("---------------------Initialized---------------------");
@@ -268,14 +277,6 @@
 			}
 		}
 
-		//creates a loop that occurs before the game runs
-		function preInitRun(){
-			requestAnimFrame(function(){
-				preInitRun();
-			})
-			
-		}
-
 		//creates a loop that the entire game runs on
 		function run(){
 			requestAnimFrame(function(){
@@ -284,9 +285,9 @@
 			update();
 			render();
 		}
-
-		preInitImages([])
-		checkPreInitImages();
+		startLoad(game.requiredInitImages);
+		initImages(game.imagesToLoadInit);
+		checkInitImages();
 	}); 
 })();
 

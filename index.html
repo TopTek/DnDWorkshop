@@ -30,9 +30,6 @@
 			</div>
 		</div> 
 		<div id = "viewPort">
-			<div id = "toolbar">
-				<img id="resetViewPort" src="textures/blankTile.png" onmouseover="this.src='textures/blankTileHighlighted.png'" onmouseout="this.src='textures/blankTile.png'"></img>
-			</div>
 			<div id ="chatBox">
 				<div id="chatLog">
 				
@@ -41,16 +38,20 @@
 			<div id="base">
 				<canvas id="canvas"></canvas>
 				<!--<img id="tile" src="textures/blankTile.png" onmouseover="this.src='textures/blankTileHighlighted.png'" onmouseout="this.src='textures/blankTile.png'"></img>--->
+				<div id = "toolbar">
+					<img id="resetViewPort" src="textures/blankTile.png" onmouseover="this.src='textures/blankTileHighlighted.png'" onmouseout="this.src='textures/blankTile.png'"></img>
+				</div>
 			</div>
 		</div>
 		<div id = "rightInfo"></div>
 		<div id = "centerInfo"></div>
 	</div>
+	<div id="backgroundAnimator"></div>
 	<div id="loadingContainer">
 		<div id="loadingCenter">
-			<img class="loadingIcon" src="iconUnsaturated.png"></img>
+			<img class="loadingIcon" id="loadingIconUnsaturated" src="iconUnsaturated.png"></img>
 			<div id="percentLoaded">
-				<img class="loadingIcon" src="icon.png"></img>
+				<img class="loadingIcon" id="loadingIcon" src="icon.png"></img>
 			</div>
 		</div>
 	</div>
