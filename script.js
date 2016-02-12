@@ -236,7 +236,6 @@
   				game.initImages[i].onload = function(){ 
   					game.doneInitImages++;  
 					progressLoad();
-					sleep(500);
   				} 
   			} 
   		} 
