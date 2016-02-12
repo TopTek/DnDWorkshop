@@ -57,12 +57,25 @@
 		
 		$("#loadingContainer").hide();
 		
-		$("#canvas").mousedown(function(){
-			mouse.down = true;
+		$("#canvas").mousedown(function(event){
+			switch(event.which){
+				case 1:
+					mouse.down = true;	
+				break;
+				
+				default:
+			};
+			
 			});
 		
-		$("#toolbar").mousedown(function(){
-			mouse.down = true;
+		$("#toolbar").mousedown(function(event){
+			switch(event.which){
+				case 1:
+					mouse.down = true;	
+				break;
+				
+				default:
+			};
 		});
 		
 		$(document).mouseup(function(){
