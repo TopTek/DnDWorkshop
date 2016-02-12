@@ -66,7 +66,7 @@
 		$("#loadingContainer").hide();
 		
 		$("#canvas").mousedown(function(event){
-			switch(event.which){q
+			switch(event.which){
 				case 1:
 					mouse.down = true;	
 				break;
