@@ -34,14 +34,6 @@
 		game.initImages = [];
 		game.doneInitImages = 0;
 		game.requiredInitImages = game.imagesToLoadInit.length;
-		
-		game.audiosToLoadInit = [
-			"audios/boom.wav"
-		];
-         //4 images per line
-		game.initAudios = [];
-		game.doneInitAudios = 0;
-		game.requiredInitAudios = game.audiosToLoadInit.length;
 
 		game.updates = 0;
 		game.frames = 0;
@@ -94,7 +86,7 @@
 		$("#iconMap").click(function(){
 			$("#iconSettings").stop(true,false);
 			$("#iconSettings").slideToggle();
-			getAudio("audios/boom.wav").play();
+			playAudio("audios/boom.mp3");
 		});
 		$("#iconContainer").mouseleave(function(){
 			$("#iconSettings").slideUp();
@@ -251,16 +243,22 @@
   		function initAudios(paths){ 
   			game.requiredInitAudios = paths.length;
   			for(i in paths){ 
-  				var aud = new Audio; 
-  				aud.src = paths[i]; 
+  				var aud = new Audio();
+  				aud.src = paths[i];
+				aud.load();
   				game.initAudios[i] = aud; 
   				console.log(paths[i] + " Loaded"); 
-  				game.initAudios[i].onload = function(){ 
-  					game.doneInitAudios++;  
-					progressLoad();
-  				} 
+  				game.doneInitAudios++;  
+				progressLoad();
   			} 
   		} 
+		
+		function playAudio(path){
+			var audio = new Audio();
+			audio.src = path;
+			audio.load();
+			audio.play();
+		}
 
   		//ensures that each image is loaded before starting the actual game
   		function checkInitAudios(){ 
@@ -292,8 +290,8 @@
   		//ensures that each image is loaded before starting the actual game
   		function checkInitImages(){ 
   			if(game.doneInitImages >= game.requiredInitImages){
-  				initAudios(game.audiosToLoadInit);
-				checkInitAudios(); 
+  				endLoad();
+  				init(); 
   			}else{ 
   				setTimeout(function(){ 
   					checkInitImages();   
