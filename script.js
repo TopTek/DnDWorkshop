@@ -48,6 +48,9 @@
 		
 		game.context = canvas.getContext("2d");
 		
+		game.chatMessage = "";
+		game.chatLog =[];
+		
 		var mouse = {};
 		mouse.x = 0;
 		mouse.y = 0;
@@ -88,6 +91,7 @@
 			$("#iconSettings").slideToggle();
 			playAudio("audios/boom.mp3");
 		});
+		
 		$("#iconContainer").mouseleave(function(){
 			$("#iconSettings").slideUp();
 		});
@@ -96,6 +100,8 @@
 		$("#toolbar").on("mousewheel", function(e){mousewheel(e)});
 		
 		$("#iconMap").imageMapResize();
+		
+		$("#chatLog").css("top", 170 - $("#chatLog").height());
 		
 		function mousewheel(e){
 			if(e.originalEvent.wheelDelta > 0){
@@ -132,6 +138,13 @@
 			game.scale = 1;
 		})
 		
+		/*$("chatImput").keyup(function(e){
+			if(e.keyCode == 13){
+				readChatImput();
+				addChatMessage(game.chatMessage);
+			}
+		})
+		
 		/* Key Codes
 		Up Arrow		38
 		Down Arrow		40
@@ -147,6 +160,24 @@
 		
 		Space			32
 		*/
+		
+		function test(){
+			readChatImput();
+			addChatMessage(game.chatMessage);
+		}
+		
+		function readChatImput(){
+			var element = document.getElementById("chatImput");
+			game.chatMessage = element.value;
+		}
+		
+		function addChatMessage(msg){
+			game.chatLog.push(msg);
+			var div = document.createElement("div");
+			div.id = game.chatLog.length;
+			div.className = "chatMessage";
+			document.getElementById("chatLog").appendChild(div);
+		}
 		
 		function renderMap(){
 			for(var i in game.tiles){
