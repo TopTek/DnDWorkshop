@@ -58,6 +58,9 @@
 		mouse.lastUpX = 0;
 		mouse.lastUpY = 0;
 		
+		var users = {};
+		users.clientUsername = "User";
+		
 		$("#loadingContainer").hide();
 		
 		$("#canvas").mousedown(function(event){
@@ -101,8 +104,6 @@
 		
 		$("#iconMap").imageMapResize();
 		
-		$("#chatLog").css("top", 170 - $("#chatLog").height());
-		
 		function mousewheel(e){
 			if(e.originalEvent.wheelDelta > 0){
 				game.scale +=.25;
@@ -138,9 +139,9 @@
 			game.scale = 1;
 		})
 		
-		/*$("chatImput").keyup(function(e){
+		$("#chatInput").keyup(function(e){
 			if(e.keyCode == 13){
-				readChatImput();
+				readChatinput();
 				addChatMessage(game.chatMessage);
 			}
 		})
@@ -161,22 +162,19 @@
 		Space			32
 		*/
 		
-		function test(){
-			readChatImput();
-			addChatMessage(game.chatMessage);
-		}
-		
-		function readChatImput(){
-			var element = document.getElementById("chatImput");
-			game.chatMessage = element.value;
+		function readChatinput(){
+			game.chatMessage = document.getElementById("chatInput").value;
 		}
 		
 		function addChatMessage(msg){
 			game.chatLog.push(msg);
 			var div = document.createElement("div");
 			div.id = game.chatLog.length;
-			div.className = "chatMessage";
+			div.className ="chatMessage";
+			div.innerHTML = users.clientUsername + ": " + msg;
 			document.getElementById("chatLog").appendChild(div);
+			$("#chatLog").css("top", 170 - $("#chatLog").height());
+			document.getElementById("chatInput").value = "";
 		}
 		
 		function renderMap(){
