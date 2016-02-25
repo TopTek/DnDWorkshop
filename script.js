@@ -51,6 +51,8 @@
 		game.chatMessage = "";
 		game.chatLog =[];
 		
+		game.keys = [];
+		
 		var mouse = {};
 		mouse.x = 0;
 		mouse.y = 0;
@@ -63,6 +65,17 @@
 		
 		$("#loadingContainer").hide();
 		
+		//tells you the keyCode of the key that is being pressed
+		$(document).keydown(function(e){
+			//alert(e.keyCode);
+			game.keys[e.keyCode] = true;
+		})
+
+		//tells you the keyCode of the key that is being unpressed
+		$(document).keyup(function(e){
+			game.keys[e.keyCode] = false;
+		})
+		
 		$("#canvas").mousedown(function(event){
 			switch(event.which){
 				case 1:
@@ -73,16 +86,6 @@
 			};
 			
 			});
-		
-		$("#toolbar").mousedown(function(event){
-			switch(event.which){
-				case 1:
-					mouse.down = true;	
-				break;
-				
-				default:
-			};
-		});
 		
 		$(document).mouseup(function(){
 			mouse.down = false;
@@ -160,6 +163,7 @@
 		W 				87 ---
 		
 		Space			32
+		Control			17
 		*/
 		
 		function readChatinput(){
@@ -209,8 +213,8 @@
 		//upadates all logic and keeps track of how many updates the game has
 		//uses few functions based on what needs to be updated
 		function update(){
-			moveBase();
-			
+			if(game.keys[17]) moveBase();
+
 			game.updates++;
 		}
 
