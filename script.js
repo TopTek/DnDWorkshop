@@ -63,6 +63,21 @@
 		var users = {};
 		users.clientUsername = "User";
 		
+		$(window).resize(function(){
+			var width = window.innerWidth;
+			var height = window.innerHeight;
+			
+			if(width < 700){
+				$("#container").hide();
+				$("#loadingContainer").hide();
+			}
+			
+			if(width >= 700){
+				$("#container").show();
+				$("#loadingContainer").show();
+			}
+		});
+		
 		$("#loadingContainer").hide();
 		
 		//tells you the keyCode of the key that is being pressed
@@ -106,6 +121,24 @@
 		$("#toolbar").on("mousewheel", function(e){mousewheel(e)});
 		
 		$("#iconMap").imageMapResize();
+		
+		$("#chatInput").mousedown(function(){
+			extendChat();
+		});
+		
+		$("#chatInput").keydown(function(){
+			extendChat();
+		});
+		
+		$("#canvas").mousemove(function(){
+			$("#chatBox").css("overflow", "hidden");
+			$("#chatLog").css("pointer-events", "none");
+		});
+		
+		function extendChat(){
+			$("#chatBox").css("overflow", "visible");
+			$("#chatLog").css("pointer-events", "auto");
+		}
 		
 		function mousewheel(e){
 			if(e.originalEvent.wheelDelta > 0){
