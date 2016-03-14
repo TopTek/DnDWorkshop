@@ -26,6 +26,7 @@
 
 		game.oldTime = (new Date().getTime());
 		game.time = 0;
+		game.canAnimIcon = true;
 
 		game.imagesToLoadInit = [
 			"textures/blankTile.png","textures/blankTileHighlighted.png", "textures/grass.png"
@@ -63,6 +64,11 @@
 		var users = {};
 		users.clientUsername = "User";
 		
+		/*<----- Starting Initilization JQuery Methoods ----->*/
+		$("#loadingContainer").hide();
+		$("#serverCreationContainer").hide();
+		/*<----- End Of Initilization JQuery Methoods ----->*/
+		
 		$(window).resize(function(){
 			var width = window.innerWidth;
 			var height = window.innerHeight;
@@ -77,8 +83,6 @@
 				$("#loadingContainer").show();
 			}
 		});
-		
-		$("#loadingContainer").hide();
 		
 		//tells you the keyCode of the key that is being pressed
 		$(document).keydown(function(e){
@@ -108,13 +112,17 @@
 		$("#iconSettings").toggle();
 		
 		$("#iconMap").click(function(){
-			$("#iconSettings").stop(true,false);
-			$("#iconSettings").slideToggle();
-			playAudio("audios/boom.mp3");
+			if(game.canAnimIcon){
+				game.canAnimIcon = false;
+				$("#iconSettings").slideToggle(function(){game.canAnimIcon = true;});
+				playAudio("audios/boom.mp3");
+			}
 		});
 		
 		$("#iconContainer").mouseleave(function(){
-			$("#iconSettings").slideUp();
+			if(game.canAnimIcon){
+				$("#iconSettings").slideUp(function(){game.canAnimIcon = true;});
+			}
 		});
 		
 		$("#canvas").on("mousewheel", function(e){mousewheel(e)});
@@ -178,9 +186,25 @@
 		$("#chatInput").keyup(function(e){
 			if(e.keyCode == 13){
 				readChatinput();
-				addChatMessage(game.chatMessage);
+				if(game.chatMessage != ""){
+					addChatMessage(game.chatMessage);
+				}
 			}
 		})
+		
+		$("#createGame").click(function(){
+			startServerCreation();
+		});
+		
+		$("#submitCreateServer").click(function(){
+			$("#serverCreationContainer").hide();
+			url = "createGameServer.php";
+			data = "serverName=" + document.getElementById("createdServerNameInput").value;
+			document.getElementById("createdServerNameInput").value = "";
+			xmlRequestPOST(url, data, true, function(xhttp){
+				console.log(xhttp.responseText);
+			});
+		});
 		
 		/* Key Codes
 		Up Arrow		38
@@ -198,6 +222,11 @@
 		Space			32
 		Control			17
 		*/
+		
+		function startServerCreation(){
+			$("#iconSettings").slideUp();
+			$("#serverCreationContainer").show();
+		}
 		
 		function readChatinput(){
 			game.chatMessage = document.getElementById("chatInput").value;
@@ -296,6 +325,20 @@
 			});
 		}
 		
+		//AJAX call function
+		function xmlRequestPOST(url, data, async, cfunction){
+			var xhttp 
+			xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (xhttp.readyState == 4 && xhttp.status == 200) {
+					cfunction(xhttp);
+				}
+			};
+			xhttp.open("POST", url, async);
+			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhttp.send(data);
+		}
+		
 		function sleep(milliseconds) {
 			var start = new Date().getTime();
 			for (var i = 0; i < 1e7; i++) {
@@ -367,7 +410,6 @@
 
 		//adds what needs to be added before the first frame is drawn and ends the initialization process
 		function init(){
-			createMap(10, 10);
 			//all processes that need to be initialized go above this
 			console.log("RequestAnimationFrame: Set");
 			console.log("---------------------Initialized---------------------");

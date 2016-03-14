@@ -17,16 +17,26 @@
 			<div id = "iconContainer">
 				<div id= "iconSettings">
 					<div id="iconSettingsBlock"></div>
-					<div class="setting">Join Game</div>
-					<div class="setting">Create Game</div>
-					<div class="setting">Characters</div>
-					<div class="setting">Help</div>
-					<div class="setting">Donate</div>
+					<div class="setting" id="joinGame">Join Game</div>
+					<div class="setting" id="createGame">Create Game</div>
+					<div class="setting" id="characters">Characters</div>
+					<div class="setting" id="help">Help</div>
+					<div class="setting" id="donate">Donate</div>
 				</div>
 				<img id="icon" src="icon.png" usemap="#iconMap"></img>
 				<map name="iconMap" id="iconMap">
 					<area shape="poly" coords="511,897,908,586,948,588,980,570,989,538,980,505,958,485,958,156,998,112,903,29,861,79,782,94,712,92,618,71,512,18,421,64,341,89,273,95,215,89,170,79,121,29,27,112,70,161,68,482,38,526,47,571,79,586,114,588" href="#" alt="" />
 				</map>
+			</div>
+			
+			<div id="serverCreationContainer">
+				<div class="mainTag">Create Server</div>
+				<form action="#" onsubmit="return false;" autocomplete=off>
+					<div class="fieldTag">Name:
+						<input type="text" name="chat" id="createdServerNameInput" class="inputField">
+						<div id="submitCreateServer">Submit</div>
+					</div>
+				</form>
 			</div>
 		</div> 
 		<div id = "viewPort">
