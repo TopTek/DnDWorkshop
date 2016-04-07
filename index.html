@@ -17,11 +17,13 @@
 			<div id = "iconContainer">
 				<div id= "iconSettings">
 					<div id="iconSettingsBlock"></div>
-					<div class="setting" id="joinGame">Join Game</div>
-					<div class="setting" id="createGame">Create Game</div>
-					<div class="setting" id="characters">Characters</div>
-					<div class="setting" id="help">Help</div>
-					<div class="setting" id="donate">Donate</div>
+					<div class="setting" id="loginSetting">Login</div>
+					<div class="setting" id="registerSetting">Register</div>
+					<div class="setting" id="joinGameSetting">Join Game</div>
+					<div class="setting" id="createGameSetting">Create Game</div>
+					<div class="setting" id="charactersSetting">Characters</div>
+					<div class="setting" id="helpSetting">Help</div>
+					<div class="setting" id="donateSetting">Donate</div>
 				</div>
 				<img id="icon" src="icon.png" usemap="#iconMap"></img>
 				<map name="iconMap" id="iconMap">
@@ -32,12 +34,28 @@
 			<div id="serverCreationContainer">
 				<div class="mainTag">Create Server</div>
 				<form action="#" onsubmit="return false;" autocomplete=off>
-					<div class="fieldTag">Name:
-						<input type="text" name="chat" id="createdServerNameInput" class="inputField">
-						<div id="submitCreateServer">Submit</div>
+					<div class="fieldTag">
+						<br>Name:
+						<br><input type="text" name="text" id="createdServerNameInput" class="inputField">
+						<br><div class="submitButton" id="submitCreateServer">Submit</div>
 					</div>
 				</form>
 			</div>
+			
+			<div id="loginContainer"></div>
+			
+			<div id="registerContainer">
+				<div class="mainTag">Create Account</div>
+				<form action="#" onsubmit="return false;" autocomplete="off">
+					<div class="fieldTag">
+						<br><input placeholder="Username" type="text" name="usrname" id="usernameRegisterInput" class="inputField">
+						<br><input placeholder="Password" type="password" name="text" id="passwordRegisterInput" class="inputField">
+						<br><input placeholder="Confirm Password" type="password" name="textConfirm" id="passwordRegisterConfirmInput" class="inputField">
+						<br><div class="submitButton" id="submitRegister">Submit</div>
+					</div>
+				</form>
+			</div>
+			
 		</div> 
 		<div id = "viewPort">
 			<div id="base">
@@ -47,19 +65,22 @@
 					<img id="resetViewPort" src="textures/blankTile.png" onmouseover="this.src='textures/blankTileHighlighted.png'" onmouseout="this.src='textures/blankTile.png'"></img>
 				</div>
 			</div>
-			<div id ="chatBox">
-				<div id="chatLog">
+		</div>
+		<div id = "rightInfo">
+			
+		</div>
+		<div id = "centerInfo">
+			<div id= "gradientBox">
+				<div id ="chatBox">
+					<div id="chatLog">
 				
+					</div>
 				</div>
-			</div>
-			<div id="bottomBlock">
 				<form action="#" onsubmit="return false;" autocomplete=off>
-					<input type="text" name="chat" id="chatInput">
+					<input type="text" name="text" id="chatInput">
 				</form>
 			</div>
 		</div>
-		<div id = "rightInfo"></div>
-		<div id = "centerInfo"></div>
 	</div>
 	<div id="backgroundAnimator"></div>
 	<div id="loadingContainer">

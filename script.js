@@ -67,6 +67,12 @@
 		/*<----- Starting Initilization JQuery Methoods ----->*/
 		$("#loadingContainer").hide();
 		$("#serverCreationContainer").hide();
+		$("#loginContainer").hide();
+		$("#registerContainer").hide();
+		$("#joinGameSetting").hide();
+		$("#createGameSetting").hide();
+		$("#charactersSetting").hide();
+		$("#donateSetting").hide();
 		/*<----- End Of Initilization JQuery Methoods ----->*/
 		
 		$(window).resize(function(){
@@ -143,31 +149,6 @@
 			$("#chatLog").css("pointer-events", "none");
 		});
 		
-		function extendChat(){
-			$("#chatBox").css("overflow", "visible");
-			$("#chatLog").css("pointer-events", "auto");
-		}
-		
-		function mousewheel(e){
-			if(e.originalEvent.wheelDelta > 0){
-				game.scale +=.25;
-				if(game.scale > 3) {
-					game.scale = 3;
-				}else{
-					game.x -= (mouse.x - game.x - game.offsetL) / (game.scale-.25) / 4;
-					game.y -= (mouse.y - game.y - game.offsetT) / (game.scale-.25) / 4;
-				}
-			}else{
-				game.scale -=.25;
-				if(game.scale <.5){
-					game.scale = .5;
-				}else{
-					game.x += (mouse.x - game.x - game.offsetL) / (game.scale+.25) / 4;
-					game.y += (mouse.y - game.y - game.offsetT) / (game.scale+.25) / 4;
-				}
-			}
-		}
-		
 		document.onmousemove = function(e){
 			mouse.x = e.clientX;
 			mouse.y = e.clientY;
@@ -196,6 +177,11 @@
 			startServerCreation();
 		});
 		
+		$("#createGameSetting").click(function(){
+			$("#iconSettings").slideUp();
+			$("#serverCreationContainer").show();
+		});
+		
 		$("#submitCreateServer").click(function(){
 			$("#serverCreationContainer").hide();
 			url = "createGameServer.php";
@@ -205,6 +191,42 @@
 				console.log(xhttp.responseText);
 			});
 		});
+		
+		$("#loginSetting").click(function(){
+			$("#registerContainer").hide();
+			$("#iconSettings").slideUp();
+			$("#loginContainer").show();
+		});
+		
+		$("#registerSetting").click(function(){
+			$("#loginContainer").hide();
+			$("#iconSettings").slideUp();
+			$("#registerContainer").show();
+		});
+		
+		$("#submitRegister").click(function(){
+			if(document.getElementById("passwordRegisterInput").value == document.getElementById("passwordRegisterConfirmInput").value){
+				$("#registerContainer").hide();
+				url = "createUser.php";
+				data = "username=" + document.getElementById("usernameRegisterInput").value + 
+					"&password=" + document.getElementById("passwordRegisterInput").value;
+				document.getElementById("createdServerNameInput").value = "";
+				xmlRequestPOST(url, data, true, function(xhttp){
+					console.log(xhttp.responseText);
+					if(xhttp.responseText.localeCompare("true")){
+						document.getElementById("usernameRegisterInput").value = "";
+						document.getElementById("passwordRegisterInput").value = "";
+						document.getElementById("passwordRegisterConfirmInput").value = "";
+					}
+			});
+			}else{
+				document.getElementById("usernameRegisterInput").value = "";
+				document.getElementById("passwordRegisterInput").value = "";
+				document.getElementById("passwordRegisterConfirmInput").value = "";
+			}
+		});
+		
+		
 		
 		/* Key Codes
 		Up Arrow		38
@@ -223,9 +245,31 @@
 		Control			17
 		*/
 		
-		function startServerCreation(){
-			$("#iconSettings").slideUp();
-			$("#serverCreationContainer").show();
+		/*<----- 	END OF NON-FUNCTION JQERY METHOODS	----->*/
+		
+		function mousewheel(e){
+			if(e.originalEvent.wheelDelta > 0){
+				game.scale +=.25;
+				if(game.scale > 3) {
+					game.scale = 3;
+				}else{
+					game.x -= (mouse.x - game.x - game.offsetL) / (game.scale-.25) / 4;
+					game.y -= (mouse.y - game.y - game.offsetT) / (game.scale-.25) / 4;
+				}
+			}else{
+				game.scale -=.25;
+				if(game.scale <.5){
+					game.scale = .5;
+				}else{
+					game.x += (mouse.x - game.x - game.offsetL) / (game.scale+.25) / 4;
+					game.y += (mouse.y - game.y - game.offsetT) / (game.scale+.25) / 4;
+				}
+			}
+		}
+		
+		function extendChat(){
+			$("#chatBox").css("overflow", "visible");
+			$("#chatLog").css("pointer-events", "auto");
 		}
 		
 		function readChatinput(){
