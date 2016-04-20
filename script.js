@@ -207,18 +207,22 @@
 		$("#submitRegister").click(function(){
 			if(document.getElementById("passwordRegisterInput").value == document.getElementById("passwordRegisterConfirmInput").value){
 				$("#registerContainer").hide();
-				url = "createUser.php";
-				data = "username=" + document.getElementById("usernameRegisterInput").value + 
-					"&password=" + document.getElementById("passwordRegisterInput").value;
-				document.getElementById("createdServerNameInput").value = "";
-				xmlRequestPOST(url, data, true, function(xhttp){
-					console.log(xhttp.responseText);
-					if(xhttp.responseText.localeCompare("true")){
-						document.getElementById("usernameRegisterInput").value = "";
-						document.getElementById("passwordRegisterInput").value = "";
-						document.getElementById("passwordRegisterConfirmInput").value = "";
+				$.post("createUser.php", {
+					username: document.getElementById("usernameRegisterInput").value,
+					password: document.getElementById("passwordRegisterInput").value
+				}, function(data){
+					if(!("trueR".localeCompare(data))){
+						$.post("loginUser.php", {
+							username: document.getElementById("usernameRegisterInput").value,
+							password: document.getElementById("passwordRegisterInput").value
+						}, function(data){
+							console.log(data);
+							if(!("trueL".localeCompare(data))){
+								console.log("success");
+							}
+						})
 					}
-			});
+				})
 			}else{
 				document.getElementById("usernameRegisterInput").value = "";
 				document.getElementById("passwordRegisterInput").value = "";
@@ -367,20 +371,6 @@
 				$("#percentLoaded").css("overflow","hidden");
 				$("#loadingIcon").css("width","200px","height","200px");
 			});
-		}
-		
-		//AJAX call function
-		function xmlRequestPOST(url, data, async, cfunction){
-			var xhttp 
-			xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function() {
-				if (xhttp.readyState == 4 && xhttp.status == 200) {
-					cfunction(xhttp);
-				}
-			};
-			xhttp.open("POST", url, async);
-			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xhttp.send(data);
 		}
 		
 		function sleep(milliseconds) {

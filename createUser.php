@@ -11,23 +11,30 @@
 	$salt = mcrypt_create_iv($saltLength);
 	$passwordHash = password_hash($salt.$password, PASSWORD_DEFAULT, array("cost" => 14));
 	$httpClientIPHash = password_hash($salt.$httpClientIP, PASSWORD_DEFAULT, array("cost" => 14));
+	$httpXForwardedForHash = password_hash($salt.$httpXForwardedFor, PASSWORD_DEFAULT, array("cost" => 14));
+	$remoteAddressHash = password_hash($salt.$remoteAddress, PASSWORD_DEFAULT, array("cost" => 14));
+	
 	
 	if (!file_exists("users/" . $username. "/")) {
 		mkdir("users/" . $username. "/", 0777, true);
+	}else{
+		die("falseUE");
 	}
 	
 	$file = "users/" . $username. "/" . $username . ".user";
 	$fileLogginIn = "users/" . $username. "/" . "off.log";
 	
 	$writing = @fopen($file, "x") or die("false");
+	$temp = @fopen($fileLogginIn, "x");
+	fclose($temp);
 	if($writing){
 		fputs($writing, 
-			"httpClientIP=" . $httpClientIPHash . "_httpXForwardedFor=" . passwordHash($httpXForwardedFor) . "_remoteAddress=" . $remoteAddress
-			. "_username=" . $username . "_password=" . $passwordHash . ":RRos%" . $salt
+			//"httpClientIP=" . $httpClientIPHash . "_httpXForwardedFor=" . $httpXForwardedForHash . "_remoteAddress=" . $remoteAddressHash . "_" .
+			"username=" . $username . "_password=" . $passwordHash . ":RRos%" . $salt
 		);
 	}
 	fclose($writing);
 	// might as well not overwrite the file if we didn't replace anything*/
-	echo("true");
+	echo("trueR");
 	exit();
 ?>
